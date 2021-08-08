@@ -1,8 +1,10 @@
 package com.example.noleftovers.ui.home;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -25,7 +27,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
@@ -43,13 +45,12 @@ public class HomeFragment extends Fragment {
         registerAddButton(root);
         loadFood();
         initGridView(root);
-
         return root;
     }
 
     private void registerAddButton(View view) {
         Button btn = (Button) view.findViewById(R.id.add_food_button);
-        View.OnClickListener listener = new View.OnClickListener() {
+        btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // your handler code here
@@ -57,9 +58,8 @@ public class HomeFragment extends Fragment {
                 final Dialog dialog = new Dialog(getActivity(), R.style.FullHeightDialog);
                 addButtonPressed(dialog);
             }
-        };
-        btn.setOnClickListener(listener);
-
+        });;
+        btn.setText("hey there");
     }
 
     private void addButtonPressed(final Dialog dialog) {
@@ -108,5 +108,10 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onClick(View view) {
+        System.out.println("clicked");
     }
 }

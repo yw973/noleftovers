@@ -9,7 +9,7 @@
         <entry key="app/src/main/res/layout/custom_dialogue_add_food.xml" value="0.335" />
         <entry key="app/src/main/res/layout/food_gric_cell.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_gallery.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.1296875" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_slideshow.xml" value="0.15833333333333333" />
       </map>
     </option>

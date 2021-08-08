@@ -23,7 +23,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="16dp"
-        app:srcCompat="@android:drawable/ic_input_add"
+        android:clickable="true"
+        android:enabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:srcCompat="@android:drawable/ic_input_add"
+        tools:ignore="SpeakableTextPresentCheck"
+        android:focusable="true" />
 </androidx.constraintlayout.widget.ConstraintLayout>
