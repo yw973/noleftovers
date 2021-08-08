@@ -10,12 +10,12 @@ public class Food {
     Date addedDate;
     Date dateExpired;
     Date daysLeft;
-    List<String> categories;
+    Category category;
 
-    public Food(String name, int amount, List<String> categories, Date dateExpired) {
+    public Food(String name, int amount, Category category, Date dateExpired) {
         this.name = name;
         this.amount = amount;
-        this.categories = categories;
+        this.category = category;
         this.addedDate = getToday();
         this.dateExpired = dateExpired;
     }
@@ -34,5 +34,13 @@ public class Food {
 
     public void updateAmount(int change) {
         amount += change;
+    }
+
+    enum Category {
+        FRUIT,
+        VEGETABLE,
+        MEAT,
+        SEAFOOD,
+        DAIRY
     }
 }

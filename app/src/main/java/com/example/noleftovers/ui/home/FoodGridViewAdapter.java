@@ -19,8 +19,6 @@ public class FoodGridViewAdapter extends BaseAdapter {
     Context mContext;
     List<Food> foodList;
     LayoutInflater inflater;
-
-    //TODO: 1. GridView arrangement,  e.g. cell size, rows columns
     //TODO: Food class, categories
 
     FoodGridViewAdapter(Context context, List<Food> foodList){
