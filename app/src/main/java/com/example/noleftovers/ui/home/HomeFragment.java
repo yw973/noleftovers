@@ -54,12 +54,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 // your handler code here
-                System.out.println("Button pressed");
                 final Dialog dialog = new Dialog(getActivity(), R.style.FullHeightDialog);
                 addButtonPressed(dialog);
             }
-        });;
-        btn.setText("hey there");
+        });
     }
 
     private void addButtonPressed(final Dialog dialog) {

@@ -117,9 +117,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:gravity="end"
                 android:paddingEnd="20dp"
-                android:orientation="horizontal"
-
-                >
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/submit_food"
