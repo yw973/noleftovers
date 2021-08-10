@@ -67,6 +67,9 @@ public class Food {
     }
 
     static public String categoryToString(Category category) {
+        if (category == null) {
+            return null;
+        }
         switch (category) {
             case FRUIT:
                 return "fruit";
@@ -116,6 +119,7 @@ public class Food {
         VEGETABLE,
         MEAT,
         SEAFOOD,
-        DAIRY
+        DAIRY;
+
     }
 }

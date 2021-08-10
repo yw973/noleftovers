@@ -63,6 +63,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void addButtonPressed(final Dialog dialog) {
         dialog.setContentView(R.layout.custom_dialogue_add_food);
         dialog.setCancelable(true);
@@ -92,6 +93,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 //
 //        Food banana = new Food("Banana", 5, null, null);
 //        foodList.add(banana);
+
+
         foodList = FileManager.loadFoodList(getContext());
     }
 

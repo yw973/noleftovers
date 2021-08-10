@@ -3,10 +3,12 @@ package com.example.noleftovers.ui;
 import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
 import com.example.noleftovers.ui.home.Food;
+
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,14 +30,11 @@ public class FileManager {
     static public List<Food> loadFoodList(Context context) {
         // Load text data from food_data.txt
         List<String> dataStrings = loadFile(context, FOOD_DATA_PATH);
-        System.out.print("Reading string: ");
-        System.out.println(dataStrings.get(0));
+
         // Parse string into food list
         List<Food> foods = new LinkedList<>();
         for (String data: dataStrings) {
             Food newFood = parseFoodString(data);
-            System.out.print("Parsing string: ");
-            System.out.println(newFood.toString());
             foods.add(newFood);
         }
         return foods;
@@ -50,6 +49,7 @@ public class FileManager {
         List<String> dataList = new LinkedList<>();
 
         try {
+            //Log.v("tag","loading");
             InputStream inputStream = context.openFileInput(fileName);
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
             BufferedReader br = new BufferedReader(inputStreamReader);
@@ -62,7 +62,7 @@ public class FileManager {
         }
         catch (Exception e) {
             //You'll need to add proper error handling here
-            System.out.println(e);
+            //Log.v("error",e.toString());
         }
         return dataList;
     }
@@ -73,15 +73,15 @@ public class FileManager {
         for (Food food: foodList){
             stringList.add(food.toString());
         }
-        System.out.print("Saving string: ");
-        System.out.println(stringList.get(0));
+        //Log.v("tag","Saving string: ");
+        //Log.v("tag",stringList.get(0));
         // convert string list to a long long string separated by "\n"
         try {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("food_data.txt", Context.MODE_PRIVATE));
             outputStreamWriter.write(String.join("\n",stringList));
             outputStreamWriter.close();
-            System.out.println("write succeed");
-            System.out.println(String.join("\n",stringList));
+            //Log.v("tag","write succeed");
+            //Log.v("tag", String.join("\n",stringList));
         }
         catch (IOException e) {
             System.out.println("File write failed: " + e.toString());
