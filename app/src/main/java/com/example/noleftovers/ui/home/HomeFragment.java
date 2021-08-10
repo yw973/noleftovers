@@ -2,6 +2,7 @@ package com.example.noleftovers.ui.home;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.noleftovers.MainActivity;
 import com.example.noleftovers.R;
 import com.example.noleftovers.databinding.FragmentHomeBinding;
+import com.example.noleftovers.ui.FileManager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -68,18 +71,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String foodName = ((TextView) dialog.findViewById(R.id.input_food_name)).getText().toString();
-                int amount = Integer.parseInt(((TextView) dialog.findViewById(R.id.input_amount)).getText().toString());
+                String[] data = new String[5];
+                data[0] = ((TextView) dialog.findViewById(R.id.input_food_name)).getText().toString();
+                data[1] = ((TextView) dialog.findViewById(R.id.input_amount)).getText().toString();
+                data[2] = "whatever";
+                data[3] = ((TextView) dialog.findViewById(R.id.input_expired_date)).getText().toString();
 
-                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-                String dateString = ((TextView) dialog.findViewById(R.id.input_expired_date)).getText().toString();
-                Date dateExpired = null;
-                try {
-                    dateExpired = formatter.parse(dateString);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                Food newFood = new Food(foodName, amount, null, dateExpired);
+                Food newFood = new Food(data);
                 foodList.add(newFood);
                 foodViewAdapter.notifyDataSetChanged();
                 dialog.dismiss();
@@ -89,11 +87,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void loadFood() {
-        Food apple = new Food("Apple", 2, null, null);
-        foodList.add(apple);
-
-        Food banana = new Food("Banana", 5, null, null);
-        foodList.add(banana);
+//        Food apple = new Food("Apple", 2, null, null);
+//        foodList.add(apple);
+//
+//        Food banana = new Food("Banana", 5, null, null);
+//        foodList.add(banana);
+        foodList = FileManager.loadFoodList(getContext());
     }
 
     private void initGridView(View view) {
@@ -102,10 +101,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         foodGridView.setAdapter(foodViewAdapter);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        FileManager.saveFoodList(getContext(), foodList);
     }
 
     @Override
