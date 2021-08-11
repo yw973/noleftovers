@@ -4,12 +4,15 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,6 +26,8 @@ import com.example.noleftovers.MainActivity;
 import com.example.noleftovers.R;
 import com.example.noleftovers.databinding.FragmentHomeBinding;
 import com.example.noleftovers.ui.FileManager;
+
+import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -54,6 +59,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void registerAddButton(View view) {
         Button btn = (Button) view.findViewById(R.id.add_food_button);
         btn.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 // your handler code here
@@ -88,20 +94,42 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void loadFood() {
+        foodList = FileManager.loadFoodList(getContext());
+
 //        Food apple = new Food("Apple", 2, null, null);
 //        foodList.add(apple);
 //
 //        Food banana = new Food("Banana", 5, null, null);
 //        foodList.add(banana);
 
-
-        foodList = FileManager.loadFoodList(getContext());
     }
 
     private void initGridView(View view) {
         GridView foodGridView = view.findViewById(R.id.food_grid_view);
         foodViewAdapter = new FoodGridViewAdapter(getContext(), foodList);
         foodGridView.setAdapter(foodViewAdapter);
+        foodGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Food food = foodList.get(i);
+                final Dialog dialog = new Dialog(getActivity(), R.style.FullHeightDialog);
+                dialog.setContentView(R.layout.food_detail_dialogue);
+                dialog.setCancelable(true);
+                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                TextView amountTextView = (TextView) dialog.findViewById(R.id.food_amount_dialog);
+                amountTextView.setText(Integer.toString(food.amount));
+                ImageButton addButton = (ImageButton) dialog.findViewById(R.id.add_food_amount_button);
+                addButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        food.amount = food.amount+1;
+                        amountTextView.setText(Integer.toString(food.amount));
+                        foodViewAdapter.notifyDataSetChanged();
+                    }
+                });
+                dialog.show();
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

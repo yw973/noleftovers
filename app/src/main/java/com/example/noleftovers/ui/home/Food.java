@@ -111,6 +111,9 @@ public class Food {
         return name+" "+amount+" "+category+" "+expiredDate+" "+dateAdded; //"Apple 5 fruit .."
     }
     public String dateToString(Date date){
+        if (date == null){
+            return "date-unknown";
+        }
         return formatter.format(date);
     }
 

@@ -7,6 +7,7 @@
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.15833333333333333" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.165" />
         <entry key="app/src/main/res/layout/custom_dialogue_add_food.xml" value="0.28211974249447275" />
+        <entry key="app/src/main/res/layout/food_detail_dialogue.xml" value="0.25" />
         <entry key="app/src/main/res/layout/food_gric_cell.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_gallery.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25" />
@@ -15,7 +16,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
