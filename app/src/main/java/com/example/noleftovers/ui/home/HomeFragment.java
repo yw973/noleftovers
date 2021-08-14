@@ -118,16 +118,32 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 TextView amountTextView = (TextView) dialog.findViewById(R.id.food_amount_dialog);
                 amountTextView.setText(Integer.toString(food.amount));
+
                 ImageButton addButton = (ImageButton) dialog.findViewById(R.id.add_food_amount_button);
-                addButton.setOnClickListener(new View.OnClickListener() {
+                addAmountChangeListener(addButton, amountTextView, food, 1);
+                ImageButton minusButton = (ImageButton) dialog.findViewById(R.id.subtract_food_amount_button);
+                addAmountChangeListener(minusButton, amountTextView, food, -1);
+
+                Button deleteButton = (Button) dialog.findViewById(R.id.delete_food);
+                deleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        food.amount = food.amount+1;
-                        amountTextView.setText(Integer.toString(food.amount));
+                        foodList.remove(i);
                         foodViewAdapter.notifyDataSetChanged();
+                        dialog.dismiss();
                     }
                 });
                 dialog.show();
+            }
+        });
+    }
+
+    void addAmountChangeListener(ImageButton btn, TextView amountTextView, Food food, int sign) {
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                food.amount = food.amount+1*sign;
+                amountTextView.setText(Integer.toString(food.amount));
             }
         });
     }
