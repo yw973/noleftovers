@@ -1,46 +1,52 @@
 package com.miximixi.noleftovers.ui.food;
 
-import android.annotation.SuppressLint;
+import static android.app.Activity.RESULT_OK;
+
+import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.miximixi.noleftovers.MainActivity;
 import com.miximixi.noleftovers.R;
 import com.miximixi.noleftovers.databinding.FragmentFoodBinding;
 import com.miximixi.noleftovers.ui.FileManager;
 
 import org.w3c.dom.Text;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-public class FoodFragment extends Fragment implements View.OnClickListener {
+public class FoodFragment extends Fragment {
 
     private FoodViewModel foodViewModel;
     private FragmentFoodBinding binding;
     private FoodGridViewAdapter foodViewAdapter;
     private List<Food> foodList = new LinkedList<>();
+
+    private ImageView imageView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -50,9 +56,16 @@ public class FoodFragment extends Fragment implements View.OnClickListener {
         binding = FragmentFoodBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        imageView = (ImageView) root.findViewById(R.id.image_view);
+
+        FoodTextScanner.foodFragment = this;
+        FoodTextScanner.loadFoodDict();
+
         registerAddButton(root);
+        registerCameraButton(root);
         loadFood();
         initGridView(root);
+        //testTextRecognization(R.drawable.wegmanstest);
         return root;
     }
 
@@ -93,6 +106,11 @@ public class FoodFragment extends Fragment implements View.OnClickListener {
         dialog.show();
     }
 
+    private void testTextRecognization(int fileName) {
+        Bitmap receipt = BitmapFactory.decodeResource(getResources(), fileName);
+        FoodTextScanner.process(receipt);
+    }
+
     private void loadFood() {
         foodList = FileManager.loadFoodList(getContext());
 
@@ -102,6 +120,22 @@ public class FoodFragment extends Fragment implements View.OnClickListener {
 //        Food banana = new Food("Banana", 5, null, null);
 //        foodList.add(banana);
 
+    }
+
+    public void updateFoodList(List<Food> newFoods) {
+        for (Food newFood: newFoods) {
+            boolean added = false;
+            for (Food oldFood: foodList) {
+                if (newFood.name.toLowerCase().equals(oldFood.name)) {
+                    oldFood.amount += newFood.amount;
+                    added = true;
+                }
+            }
+            if (!added) {
+                foodList.add(newFood);
+            }
+        }
+        foodViewAdapter.notifyDataSetChanged();
     }
 
     private void initGridView(View view) {
@@ -118,6 +152,8 @@ public class FoodFragment extends Fragment implements View.OnClickListener {
                 dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 TextView amountTextView = (TextView) dialog.findViewById(R.id.food_amount_dialog);
                 amountTextView.setText(Integer.toString(food.amount));
+                TextView expirationDateTextView = (TextView) dialog.findViewById(R.id.expired_date_dialog);
+                expirationDateTextView.setText(food.dateToString(food.dateExpired));
 
                 ImageButton addButton = (ImageButton) dialog.findViewById(R.id.add_food_amount_button);
                 addAmountChangeListener(addButton, amountTextView, food, 1);
@@ -147,6 +183,37 @@ public class FoodFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
+    private static final int REQUEST_IMAGE_CAPTURE=101;
+
+    private void registerCameraButton(View view) {
+        ImageButton btn = (ImageButton) view.findViewById(R.id.camera_button);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Activity activity = getActivity();
+
+                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)
+                        == PackageManager.PERMISSION_DENIED) {
+                    ActivityCompat.requestPermissions(activity, new String[] {Manifest.permission.CAMERA}, REQUEST_IMAGE_CAPTURE);
+                }
+                Intent imageTakeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                //if (imageTakeIntent.resolveActivity(activity.getPackageManager()) != null) {
+                startActivityForResult(imageTakeIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode==RESULT_OK){
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageView.setImageBitmap(imageBitmap);
+        }
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -154,10 +221,5 @@ public class FoodFragment extends Fragment implements View.OnClickListener {
         super.onDestroyView();
         binding = null;
         FileManager.saveFoodList(getContext(), foodList);
-    }
-
-    @Override
-    public void onClick(View view) {
-        System.out.println("clicked");
     }
 }

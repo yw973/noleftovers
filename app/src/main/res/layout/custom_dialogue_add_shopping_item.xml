@@ -30,7 +30,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Add Food"
+                    android:text="Add Item"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     android:layout_marginStart="10dp"
                     android:textColor="#ffffff"
@@ -52,15 +52,9 @@
                 android:paddingBottom="20dp"
                 android:paddingEnd="20dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Item Name"
-                    android:textColor="#80000000"
-                    android:textSize="14sp" />
 
                 <EditText
-                    android:id="@+id/input_food_name"
+                    android:id="@+id/input_item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -68,46 +62,9 @@
                     android:textColor="#000000"
                     android:textSize="16sp"
                     android:maxLength="50"
-                    android:hint="Magic Mushroom"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:text="Amount"
-                    android:textColor="#80000000"
-                    android:textSize="14sp"/>
-
-                <EditText
-
-                    android:id="@+id/input_amount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:singleLine="true"
-                    android:textColor="#000000"
-                    android:textSize="16sp"
-                    android:maxLength="50"
-                    android:hint="3"/>
+                    />
 
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:text="Expired Date"
-                    android:textColor="#80000000"
-                    android:textSize="14sp" />
-
-                <EditText
-                    android:id="@+id/input_expired_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:inputType="textMultiLine"
-                    android:textColor="#000000"
-                    android:textSize="16sp"
-                    android:hint="mm/dd/yyyy"/>
 
             </LinearLayout>
             <LinearLayout
@@ -120,16 +77,16 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/submit_food"
+                    android:id="@+id/add_item_shopping"
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="300dp"
+                    android:layout_marginBottom="20dp"
                     android:background="@null"
                     android:text="Add"
                     android:textColor="@color/colorSecondaryDark"
                     android:textSize="16dp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="20dp"/>
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
 

@@ -1,6 +1,8 @@
 package com.miximixi.noleftovers.ui.food;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +48,14 @@ public class FoodGridViewAdapter extends BaseAdapter {
         }
         Food food = foodList.get(i);
         ImageView imageView = view.findViewById(R.id.food_icon);
+        try {
+            int imgId = mContext.getResources().getIdentifier(food.name.toLowerCase(), "drawable", mContext.getPackageName());
+            Drawable img = mContext.getResources().getDrawable(imgId);
+            imageView.setImageDrawable(img);
+        } catch (Exception e) {
+
+        }
+
         TextView textView = view.findViewById(R.id.food_label);
         textView.setText(food.name);
         return view;

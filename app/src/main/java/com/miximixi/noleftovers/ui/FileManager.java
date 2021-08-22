@@ -20,6 +20,7 @@ public class FileManager {
     // date: mm/dd/yyyy
     // category: string
     static final String FOOD_DATA_PATH = "food_data.txt";
+    static final String SHOPPING_LIST_DATA_PATH = "shopping_list_data.txt";
 
     static public List<Food> loadFoodList(Context context) {
         // Load text data from food_data.txt

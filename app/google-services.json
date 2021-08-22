@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "759225741800",
+    "project_id": "noleftovers-d9f86",
+    "storage_bucket": "noleftovers-d9f86.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:759225741800:android:343cd0abbd11db0798b45d",
+        "android_client_info": {
+          "package_name": "com.miximixi.noleftovers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "759225741800-hkbof463fu5esr8jr4ntvmfdmbuurju9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8h7f3Hsv1r5NgJtPVPvtOhIVKzVk6pHM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "759225741800-hkbof463fu5esr8jr4ntvmfdmbuurju9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
