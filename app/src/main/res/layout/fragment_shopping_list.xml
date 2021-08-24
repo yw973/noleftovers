@@ -26,4 +26,18 @@
         tools:ignore="SpeakableTextPresentCheck"
         android:focusable="true" />
 
+    <Button
+        android:id="@+id/clear_shopping_item_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_marginBottom="65dp"
+        android:layout_marginStart="10dp"
+        android:text="Clear All"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:ignore="SpeakableTextPresentCheck"
+        android:focusable="true" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

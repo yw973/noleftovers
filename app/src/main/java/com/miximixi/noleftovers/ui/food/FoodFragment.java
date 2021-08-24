@@ -44,7 +44,6 @@ public class FoodFragment extends Fragment {
     private FoodViewModel foodViewModel;
     private FragmentFoodBinding binding;
     private FoodGridViewAdapter foodViewAdapter;
-    private List<Food> foodList = new LinkedList<>();
 
     private ImageView imageView;
 
@@ -52,6 +51,8 @@ public class FoodFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         foodViewModel =
                 new ViewModelProvider(this).get(FoodViewModel.class);
+        foodViewModel.mContext = getContext();
+        foodViewModel.loadFood();
 
         binding = FragmentFoodBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -63,7 +64,7 @@ public class FoodFragment extends Fragment {
 
         registerAddButton(root);
         registerCameraButton(root);
-        loadFood();
+
         initGridView(root);
         //testTextRecognization(R.drawable.wegmanstest);
         return root;
@@ -98,7 +99,7 @@ public class FoodFragment extends Fragment {
                 data[3] = ((TextView) dialog.findViewById(R.id.input_expired_date)).getText().toString();
 
                 Food newFood = new Food(data);
-                foodList.add(newFood);
+                foodViewModel.foodList.add(newFood);
                 foodViewAdapter.notifyDataSetChanged();
                 dialog.dismiss();
             }
@@ -111,41 +112,14 @@ public class FoodFragment extends Fragment {
         FoodTextScanner.process(receipt);
     }
 
-    private void loadFood() {
-        foodList = FileManager.loadFoodList(getContext());
-
-//        Food apple = new Food("Apple", 2, null, null);
-//        foodList.add(apple);
-//
-//        Food banana = new Food("Banana", 5, null, null);
-//        foodList.add(banana);
-
-    }
-
-    public void updateFoodList(List<Food> newFoods) {
-        for (Food newFood: newFoods) {
-            boolean added = false;
-            for (Food oldFood: foodList) {
-                if (newFood.name.toLowerCase().equals(oldFood.name)) {
-                    oldFood.amount += newFood.amount;
-                    added = true;
-                }
-            }
-            if (!added) {
-                foodList.add(newFood);
-            }
-        }
-        foodViewAdapter.notifyDataSetChanged();
-    }
-
     private void initGridView(View view) {
         GridView foodGridView = view.findViewById(R.id.food_grid_view);
-        foodViewAdapter = new FoodGridViewAdapter(getContext(), foodList);
+        foodViewAdapter = new FoodGridViewAdapter(getContext(), foodViewModel.foodList);
         foodGridView.setAdapter(foodViewAdapter);
         foodGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Food food = foodList.get(i);
+                Food food = foodViewModel.foodList.get(i);
                 final Dialog dialog = new Dialog(getActivity(), R.style.FullHeightDialog);
                 dialog.setContentView(R.layout.food_detail_dialogue);
                 dialog.setCancelable(true);
@@ -164,7 +138,7 @@ public class FoodFragment extends Fragment {
                 deleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        foodList.remove(i);
+                        foodViewModel.foodList.remove(i);
                         foodViewAdapter.notifyDataSetChanged();
                         dialog.dismiss();
                     }
@@ -204,6 +178,11 @@ public class FoodFragment extends Fragment {
         });
     }
 
+    public void updateFoodList(List<Food> newFoods) {
+        foodViewModel.updateFoodList(newFoods);
+        foodViewAdapter.notifyDataSetChanged();
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
@@ -220,6 +199,6 @@ public class FoodFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-        FileManager.saveFoodList(getContext(), foodList);
+        foodViewModel.saveFoodList();
     }
 }

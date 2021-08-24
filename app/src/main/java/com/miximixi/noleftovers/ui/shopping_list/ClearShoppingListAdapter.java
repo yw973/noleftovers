@@ -5,26 +5,22 @@ import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatCheckedTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.miximixi.noleftovers.R;
-import com.miximixi.noleftovers.ui.food.Food;
 
 import java.util.List;
 
-public class ShoppingListAdapter extends RecyclerView.Adapter<ItemViewHolder> {
+public class ClearShoppingListAdapter extends RecyclerView.Adapter<ItemViewHolder> {
     Context mContext;
     List<ShoppingListItem> shoppingItemList;
     LayoutInflater inflater;
 
-    ShoppingListAdapter(Context context, List<ShoppingListItem> shoppingItemList){
+    ClearShoppingListAdapter(Context context, List<ShoppingListItem> shoppingItemList){
         this.mContext = context;
         this.shoppingItemList = shoppingItemList;
         this.inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -37,6 +33,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ItemViewHolder> {
         return new ItemViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         ShoppingListItem item = shoppingItemList.get(position);
@@ -44,38 +41,25 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ItemViewHolder> {
         checkedTextView.setText(item.name);
         checkedTextView.setChecked(item.checked);
 
-        if (!item.checked) {
-            checkedTextView.setPaintFlags(checkedTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-        } else {
-            checkedTextView.setPaintFlags(checkedTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        }
-
         checkedTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (item.checked) {
                     item.checked = false;
                     checkedTextView.setChecked(false);
-                    checkedTextView.setPaintFlags(checkedTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                 } else {
                     item.checked = true;
                     checkedTextView.setChecked(true);
-                    checkedTextView.setPaintFlags(checkedTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 }
             }
         });
 
-        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                shoppingItemList.remove(holder.getLayoutPosition());
-                notifyDataSetChanged();
-            }
-        });
+        holder.deleteButton.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public int getItemCount() {
         return shoppingItemList.size();
     }
+
 }

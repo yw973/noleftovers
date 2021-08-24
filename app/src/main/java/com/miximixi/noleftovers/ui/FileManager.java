@@ -2,10 +2,12 @@ package com.miximixi.noleftovers.ui;
 
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
 import com.miximixi.noleftovers.ui.food.Food;
+import com.miximixi.noleftovers.ui.shopping_list.ShoppingListItem;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -44,7 +46,6 @@ public class FileManager {
         List<String> dataList = new LinkedList<>();
 
         try {
-            //Log.v("tag","loading");
             InputStream inputStream = context.openFileInput(fileName);
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
             BufferedReader br = new BufferedReader(inputStreamReader);
@@ -55,10 +56,7 @@ public class FileManager {
             }
             br.close();
         }
-        catch (Exception e) {
-            //You'll need to add proper error handling here
-            //Log.v("error",e.toString());
-        }
+        catch (Exception e) { }
         return dataList;
     }
 
@@ -68,29 +66,66 @@ public class FileManager {
         for (Food food: foodList){
             stringList.add(food.toString());
         }
-        //Log.v("tag","Saving string: ");
-        //Log.v("tag",stringList.get(0));
+
         // convert string list to a long long string separated by "\n"
         try {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("food_data.txt", Context.MODE_PRIVATE));
             outputStreamWriter.write(String.join("\n",stringList));
             outputStreamWriter.close();
-            //Log.v("tag","write succeed");
-            //Log.v("tag", String.join("\n",stringList));
         }
         catch (IOException e) {
             System.out.println("File write failed: " + e.toString());
         }
+    }
 
+    // Shopping list file management
 
-        // Convert foodList to a string list
-        // ["Apple 6 fruit 01/20/2000", ""...]
+    static public List<ShoppingListItem> loadShoppingList(Context context) {
+        // Load text data from shopping_list_data.txt
+        List<String> dataStrings = loadFile(context, SHOPPING_LIST_DATA_PATH);
 
-        // Open/Create the file
-        // Write the string data to txt file
-        // either concatenate the string to a long string connected by "\n"
-        // or write it line by line
-        // save the file
+        // Parse string into food list
+        List<ShoppingListItem> shoppingList = new LinkedList<>();
+        for (String data: dataStrings) {
+            ShoppingListItem newItem = parseShoppingListString(data);
+            shoppingList.add(newItem);
+        }
+        return shoppingList;
+    }
+
+    static private ShoppingListItem parseShoppingListString(String data) {
+        String[] shoppingItemData = data.split("\\s+");
+        // "Apple checked"
+        try {
+            String name = shoppingItemData[0];
+            String isChecked = shoppingItemData[1];
+            if (isChecked.equals("checked")) {
+                return new ShoppingListItem(name, true);
+            } else {
+                return new ShoppingListItem(name, false);
+            }
+        } catch (Exception e) {
+            Log.v("debug", "Error parsing shopping item string.");
+            return null;
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    static public void saveShoppingList(Context context, List<ShoppingListItem> shoppingList) {
+        List<String> stringList = new LinkedList<>();
+        for (ShoppingListItem item: shoppingList){
+            stringList.add(item.toString());
+        }
+
+        // convert string list to a long long string separated by "\n"
+        try {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(SHOPPING_LIST_DATA_PATH, Context.MODE_PRIVATE));
+            outputStreamWriter.write(String.join("\n",stringList));
+            outputStreamWriter.close();
+        }
+        catch (IOException e) {
+            System.out.println("File write failed: " + e.toString());
+        }
     }
 
 }
